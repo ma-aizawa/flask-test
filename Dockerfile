@@ -8,7 +8,8 @@ COPY Pipfile.lock .
 ADD . /usr/src/app
 
 RUN apt-get update && \
+    apt-get install -y default-mysql-client && \
     pip install pipenv && \
-    pipenv install --system
+    pipenv install
 
 CMD ["pipenv", "run", "start"]

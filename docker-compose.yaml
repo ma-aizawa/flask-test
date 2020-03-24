@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7.27
+    environment:
+      MYSQL_ROOT_PASSWORD: password1
+      MYSQL_USER: flask_user
+      MYSQL_PASSWORD: flask_password
+    ports:
+      - '3306:3306'
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    command: bash -c 'db/00_run_sqls.sh && pipenv run start'
+    environment:
+      DB_USER: flask_user
+      DB_PASSWORD: flask_password
+      DB_HOST: mysql
+    ports:
+      - '80:5000'
+
