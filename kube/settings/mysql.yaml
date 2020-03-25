@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: flask-test
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  type: ClusterIP
+  ports:
+    - port: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: flask-test
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7.17
+          env:
+            - name: MYSQL_USER
+              value: 'flask_user'
+            - name: MYSQL_PASSWORD
+              value: 'flask_password' # TODO: 運用時はマスクする
+            - name: MYSQL_ROOT_PASSWORD
+              value: 'password1' # TODO: 運用時はマスクする
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-pv
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-pv
+          persistentVolumeClaim:
+            claimName: mysql-pvc

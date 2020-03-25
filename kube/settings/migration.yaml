@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: flask-test
+  name: migration
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: migration
+    spec:
+      containers:
+        - name: migration
+          image:  flask-test/app:v1 # TODO: ローカルでminikube上にbuildしてタグ付ける
+          imagePullPolicy: Never # TODO: ローカル用
+          command: ['/bin/bash']
+          args: ['-c', 'db/00_run_sqls.sh']
+      restartPolicy: Never
+
