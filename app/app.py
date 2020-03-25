@@ -11,6 +11,10 @@ def create_app():
     return app
 app = create_app()
 
+@app.route('/')
+def route():
+    return 'Hello, app!'
+
 @app.route('/user/<id>')
 def user(id):
     user = User.query.filter_by(id=id).first()

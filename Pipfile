@@ -10,9 +10,10 @@ flask = "*"
 sqlalchemy = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
 
 [scripts]
-start = 'python -m flask run'
+start = 'python -m flask run --host=0.0.0.0'
